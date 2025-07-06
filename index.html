@@ -1,0 +1,518 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rohit Kumar - MERN Stack Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0EA5E9', // Sky Blue
+                        dark: {
+                            900: '#0F172A',
+                            800: '#1E293B',
+                            700: '#334155'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .btn {
+                @apply px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105;
+            }
+            .btn-primary {
+                @apply bg-primary text-white hover:shadow-lg hover:shadow-primary/50;
+            }
+            .btn-outline {
+                @apply border-2 border-primary text-primary hover:bg-primary hover:text-white dark:text-white;
+            }
+            .section-title {
+                @apply text-4xl font-bold mb-8 text-center dark:text-white;
+            }
+            .skill-bar {
+                @apply h-2 rounded-full bg-gray-200 dark:bg-dark-700 overflow-hidden;
+            }
+            .skill-progress {
+                @apply h-full bg-primary transition-all duration-1000;
+            }
+            .social-icon {
+                @apply w-12 h-12 flex items-center justify-center rounded-full text-xl transition-all duration-300
+                       hover:scale-110 hover:shadow-lg dark:text-white hover:text-primary;
+            }
+        }
+
+        /* Custom Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .card-hover {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-10px);
+        }
+    </style>
+</head>
+<body class="dark:bg-dark-900 transition-colors duration-300">
+    <!-- Theme Toggle -->
+    <button id="themeToggle" class="fixed top-4 right-4 z-50 p-2 rounded-full bg-gray-200 dark:bg-dark-800 transition-all duration-300" style="margin-top: 5rem;">
+        <svg class="w-6 h-6 text-yellow-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path class="sun hidden dark:block" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+            <path class="moon dark:hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+    </button>
+
+    <nav class="fixed top-0 left-0 w-full bg-white/80 dark:bg-dark-900/80 backdrop-blur-md z-40 transition-all duration-300 border-b border-gray-200 dark:border-dark-700">
+    <div class="container mx-auto px-4">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo with animation -->
+            <a href="#" class="text-2xl font-bold text-primary flex items-center gap-2 group transition-all duration-300 hover:scale-105">
+                <svg class="w-8 h-8 transition-transform duration-300 group-hover:rotate-12" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                DevPortfolio
+            </a>
+
+            <!-- Desktop Menu with glowing effect -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="nav-link relative text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-all duration-300 hover:glow">
+                    <span class="relative z-10">Home</span>
+                    <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-primary transform scale-x-0 transition-transform duration-300 origin-left group-hover:scale-x-100"></span>
+                </a>
+                <a href="#about" class="nav-link relative text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-all duration-300 hover:glow">
+                    <span class="relative z-10">About</span>
+                    <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-primary transform scale-x-0 transition-transform duration-300 origin-left group-hover:scale-x-100"></span>
+                </a>
+                <a href="#skills" class="nav-link relative text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-all duration-300 hover:glow">
+                    <span class="relative z-10">Skills</span>
+                    <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-primary transform scale-x-0 transition-transform duration-300 origin-left group-hover:scale-x-100"></span>
+                </a>
+                <a href="#projects" class="nav-link relative text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-all duration-300 hover:glow">
+                    <span class="relative z-10">Projects</span>
+                    <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-primary transform scale-x-0 transition-transform duration-300 origin-left group-hover:scale-x-100"></span>
+                </a>
+                <a href="#contact" class="nav-link relative text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-all duration-300 hover:glow">
+                    <span class="relative z-10">Contact</span>
+                    <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-primary transform scale-x-0 transition-transform duration-300 origin-left group-hover:scale-x-100"></span>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button with animation -->
+            <button class="md:hidden text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors duration-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<style type="text/tailwindcss">
+    @layer utilities {
+        .hover\:glow:hover {
+            text-shadow: 0 0 10px theme('colors.primary');
+        }
+    }
+</style>
+<!-- Mobile Menu -->
+<div class="fixed inset-0 bg-black/50 z-30 hidden" id="mobileMenu">
+    <div class="fixed top-0 right-0 w-64 h-full bg-white dark:bg-dark-800 transform translate-x-full transition-transform duration-300">
+        <div class="flex flex-col p-6 space-y-4">
+            <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors duration-300">Home</a>
+            <a href="#about" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors duration-300">About</a>
+            <a href="#skills" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors duration-300">Skills</a>
+            <a href="#projects" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors duration-300">Projects</a>
+            <a href="#contact" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors duration-300">Contact</a>
+        </div>
+    </div>
+</div>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center px-4 py-20">
+        <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between">
+            <div class="lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0">
+                <h1 class="text-4xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white opacity-0 transform translate-y-8" id="heroTitle">
+                    Hi, I'm <span class="text-primary">Rohit Kumar</span>,<br>
+                    a Full Stack MERN Developer
+                </h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 opacity-0 transform translate-y-8" id="heroSubtitle">
+                    I build fast, responsive, and intelligent web applications.
+                </p>
+                <div class="flex gap-4 justify-center lg:justify-start opacity-0 transform translate-y-8" id="heroButtons">
+                    <a href="#projects" class="btn btn-primary">View Projects</a>
+                    <a href="#contact" class="btn btn-outline">Contact Me</a>
+                </div>
+            </div>
+            <div class="lg:w-1/2 flex justify-center animate-float">
+                <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="Developer Illustration" class="w-full max-w-lg">
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-50 dark:bg-dark-800">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title">About Me</h2>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <p class="text-lg text-gray-600 dark:text-gray-300">
+                        As a MERN Stack Developer, I specialize in building full-stack web applications using MongoDB, Express.js, React.js, and Node.js. With a passion for clean code and user-centric design, I create scalable and efficient solutions that deliver exceptional user experiences.
+                    </p>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-700 dark:text-gray-300">MongoDB</span>
+                                <span class="text-primary">90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 0%" data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-700 dark:text-gray-300">Express.js</span>
+                                <span class="text-primary">85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 0%" data-width="85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-700 dark:text-gray-300">React.js</span>
+                                <span class="text-primary">95%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 0%" data-width="95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-700 dark:text-gray-300">Node.js</span>
+                                <span class="text-primary">88%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 0%" data-width="88%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="p-6 bg-white dark:bg-dark-700 rounded-lg shadow-lg text-center card-hover">
+                        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original.svg" alt="MongoDB" class="w-16 h-16 mx-auto mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">MongoDB</h3>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-dark-700 rounded-lg shadow-lg text-center card-hover">
+                        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original.svg" alt="Express.js" class="w-16 h-16 mx-auto mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Express.js</h3>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-dark-700 rounded-lg shadow-lg text-center card-hover">
+                        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" alt="React.js" class="w-16 h-16 mx-auto mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">React.js</h3>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-dark-700 rounded-lg shadow-lg text-center card-hover">
+                        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg" alt="Node.js" class="w-16 h-16 mx-auto mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Node.js</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="min-h-screen bg-black py-20">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center text-primary mb-16">Skills</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-dark-800 p-8 rounded-xl hover:transform hover:scale-105 transition-all duration-300 group hover:shadow-xl hover:shadow-primary/20">
+                <div class="flex items-center justify-center mb-6">
+                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" alt="React.js" class="w-16 h-16 mx-auto mb-4">
+                </div>
+                <h3 class="text-2xl font-bold text-center text-white mb-4">React.js</h3>
+                <p class="text-gray-400 text-center">Frontend Development with modern React features and best practices</p>
+            </div>
+
+            <div class="bg-dark-800 p-8 rounded-xl hover:transform hover:scale-105 transition-all duration-300 group hover:shadow-xl hover:shadow-primary/20">
+                <div class="flex items-center justify-center mb-6">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" class="w-20 h-20 group-hover:animate-bounce">
+                </div>
+                <h3 class="text-2xl font-bold text-center text-white mb-4">Node.js</h3>
+                <p class="text-gray-400 text-center">Server-side development with Express.js and Node.js</p>
+            </div>
+
+            <div class="bg-dark-800 p-8 rounded-xl hover:transform hover:scale-105 transition-all duration-300 group hover:shadow-xl hover:shadow-primary/20">
+                <div class="flex items-center justify-center mb-6">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB" class="w-20 h-20 group-hover:animate-pulse">
+                </div>
+                <h3 class="text-2xl font-bold text-center text-white mb-4">MongoDB</h3>
+                <p class="text-gray-400 text-center">Database design and management with MongoDB</p>
+            </div>
+
+            <div class="bg-dark-800 p-8 rounded-xl hover:transform hover:scale-105 transition-all duration-300 group hover:shadow-xl hover:shadow-primary/20">
+                <div class="flex items-center justify-center mb-6">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="Express.js" class="w-20 h-20 group-hover:rotate-12 dark:invert">
+                </div>
+                <h3 class="text-2xl font-bold text-center text-white mb-4">Express.js</h3>
+                <p class="text-gray-400 text-center">RESTful API development with Express.js</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title">My Projects</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="bg-white dark:bg-dark-800 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <img src="https://www.shutterstock.com/image-photo/airbnb-sign-next-model-house-600nw-2459050523.jpg" alt="E-Commerce Project" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">AirBnb</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">A full-featured Airbnb-style platform built with the MERN stack. Users can create, read, update, and delete property listings. Integrated with image uploads, map location, and user authentication. It showcases real-world CRUD operations and a responsive UI.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">EJS</span>
+                            <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">Node.js</span>
+                            <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">MongoDB</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <a href="https://hims-project.onrender.com/listings" class="btn btn-primary text-sm">Live Demo</a>
+                            <a href="https://github.com/Kumarrohit93/Hims-Project.git" class="btn btn-outline text-sm">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="bg-white dark:bg-dark-800 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <img src="https://ata43.wordpress.com/wp-content/uploads/2020/06/cropped-screenshot_2020_0626_085635-1.png" alt="Task Manager Project" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">StudyHub</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">A web application where students can upload, browse, and access academic notes filtered by university, course, and semester. Built using MongoDB, Express, Node.js, and EJS. It focuses on user contribution and community-driven learning.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">EJS</span>
+                            <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">Express.js</span>
+                            <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">Socket.io</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <a href="https://studyhub-fyuj.onrender.com" class="btn btn-primary text-sm">Live Demo</a>
+                            <a href="https://github.com/Kumarrohit93/StudyHub.git" class="btn btn-outline text-sm">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="bg-white dark:bg-dark-800 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <img src="https://9to5mac.com/wp-content/uploads/sites/6/2023/04/Apple-Weather-app.jpg?quality=82&strip=all&w=1024" alt="Social Media Project" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Weather App</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">A sleek and responsive weather application built using React and the OpenWeather API. Users can search for any city to view real-time weather data, including temperature, humidity, wind speed, and condition icons. Features dynamic background changes based on weather and day/night mode.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">React</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <a href="#" class="btn btn-primary text-sm">Live Demo</a>
+                            <a href="#" class="btn btn-outline text-sm">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-50 dark:bg-dark-800">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="max-w-3xl mx-auto">
+                <form class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-2">Name</label>
+                            <input type="text" class="w-full px-4 py-3 rounded-lg bg-white dark:bg-dark-700 border border-gray-300 dark:border-dark-900 focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                            <input type="email" class="w-full px-4 py-3 rounded-lg bg-white dark:bg-dark-700 border border-gray-300 dark:border-dark-900 focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2">Message</label>
+                        <textarea rows="5" class="w-full px-4 py-3 rounded-lg bg-white dark:bg-dark-700 border border-gray-300 dark:border-dark-900 focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full md:w-auto">Send Message</button>
+                </form>
+
+                <div class="mt-12 flex justify-center gap-6">
+                    <a href="https://github.com/Kumarrohit93" class="social-icon">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/rohit-kumar-0a1435262/" class="social-icon">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/_hims_x_universe/" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center bg-white dark:bg-dark-900">
+        <p class="text-gray-600 dark:text-gray-300">
+            Built with <span class="text-red-500">❤️</span> by 
+            <span class="text-primary font-semibold">Rohit Kumar</span>
+        </p>
+    </footer>
+
+    <script>
+        // Theme Toggle with persistence
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // Check for saved theme preference or default to dark
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        });
+    
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.querySelector('nav button');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuContent = mobileMenu.querySelector('div');
+    
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenuContent.classList.toggle('translate-x-full');
+        });
+    
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target === mobileMenu) {
+                mobileMenu.classList.add('hidden');
+                mobileMenuContent.classList.add('translate-x-full');
+            }
+        });
+    
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuContent.classList.add('translate-x-full');
+                }
+            });
+        });
+    
+        // Navbar Scroll Effect
+        const navbar = document.querySelector('nav');
+        let lastScroll = 0;
+    
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll <= 0) {
+                navbar.classList.remove('shadow-lg', '-translate-y-full');
+                return;
+            }
+            
+            if (currentScroll > lastScroll) {
+                // Scrolling down
+                navbar.classList.add('-translate-y-full');
+                navbar.classList.remove('shadow-lg');
+            } else {
+                // Scrolling up
+                navbar.classList.remove('-translate-y-full');
+                navbar.classList.add('shadow-lg');
+            }
+            lastScroll = currentScroll;
+        });
+    
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+    
+        // Hero Animations
+        gsap.to('#heroTitle', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.2
+        });
+    
+        gsap.to('#heroSubtitle', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.4
+        });
+    
+        gsap.to('#heroButtons', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.6
+        });
+    
+        // Skill Bars Animation
+        const skillBars = document.querySelectorAll('.skill-progress');
+        skillBars.forEach(bar => {
+            gsap.to(bar, {
+                width: bar.dataset.width,
+                duration: 1.5,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: bar,
+                    start: 'top 80%',
+                }
+            });
+        });
+    
+        // Section Fade In
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 80%',
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
